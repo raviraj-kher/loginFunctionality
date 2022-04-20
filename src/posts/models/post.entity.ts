@@ -1,7 +1,14 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { UserEntity } from 'src/auth/modules/users.entity';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+} from 'typeorm';
 
-@Entity('post')
-class Post {
+@Entity({ name: 'posts' })
+class Posts {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -10,5 +17,12 @@ class Post {
 
   @Column()
   description: string;
+
+  // @ManyToOne(() => User, (user: User) => user.posts)
+  // @JoinColumn({ name: 'userId' })
+  // user: User;
+
+  @ManyToOne(() => UserEntity, (UserEntity) => UserEntity.posts)
+  author: UserEntity;
 }
-export default Post;
+export default Posts;

@@ -1,23 +1,26 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { from, Observable } from 'rxjs';
+import { User } from 'src/auth/modules/user.interface';
 import { Repository, UpdateResult } from 'typeorm';
-import Post from '../models/post.entity';
+import Posts from '../models/post.entity';
 import { PostData } from '../models/post.interface';
 
 @Injectable()
 export class PostsService {
   constructor(
-    @InjectRepository(Post)
-    private readonly postRepository: Repository<Post>,
+    @InjectRepository(Posts)
+    private readonly postRepository: Repository<Posts>,
   ) {}
 
   // find all
-  getAllUsers() {
+  getAllPosts(): Observable<Posts[]> {
     return from(this.postRepository.find());
   }
+
   // create
-  async createPost(post: PostData): Promise<Observable<PostData>> {
+  async createPost(user: User, post: PostData): Promise<Observable<PostData>> {
+    post.author = user;
     return from(this.postRepository.save(post));
   }
 
